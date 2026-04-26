@@ -4,7 +4,7 @@ const path = require('path');
 
 async function initDb() {
     const db = await open({
-        filename: path.join(__dirname, 'database.sqlite'),
+        filename: ':memory:',
         driver: sqlite3.Database
     });
 

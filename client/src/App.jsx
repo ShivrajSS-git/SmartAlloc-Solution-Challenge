@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { Map, Activity, Users, AlertCircle, CheckCircle2, Navigation, Sparkles, UserPlus, AlertTriangle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
 
 const COLORS = ['#1b4332', '#2d6a4f', '#dda15e', '#bc6c25', '#e76f51'];
 const CITIES = {
