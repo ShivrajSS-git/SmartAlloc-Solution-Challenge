@@ -29,7 +29,7 @@ h1, h2, h3 { font-family: 'Libre Baskerville', serif; font-weight: 700; color: v
 .sidebar { width: 280px; background: var(--brand-deep); color: var(--white); padding: 2rem 1.5rem; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; z-index: 1000; }
 .sidebar-logo { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 3rem; color: var(--brand-light); }
 .nav-links { display: flex; flex-direction: column; gap: 0.5rem; }
-.nav-item { display: flex; alignItems: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); cursor: pointer; transition: 0.2s; font-weight: 500; }
+.nav-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); cursor: pointer; transition: 0.2s; font-weight: 500; }
 .nav-item:hover { background: rgba(255, 255, 255, 0.05); }
 .nav-item.active { background: var(--accent-warm); color: var(--white); }
 
