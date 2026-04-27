@@ -58,7 +58,8 @@ async function initDb() {
         ('Safe Water Tank Installation', 'Plumbing assistance needed to install 3 large water filtration tanks.', 'Hillside Settlement', 28.6400, 77.2300, 'High', 'Water'),
         ('Sanitation Awareness Drive', 'Community outreach volunteers needed to teach basic hygiene practices.', 'Market Square', 28.6100, 77.1800, 'Medium', 'Health'),
         ('Elderly Care Support', 'Weekly check-ins and grocery delivery for isolated elderly residents.', 'Old Town District', 28.6500, 77.2000, 'Medium', 'Social Support'),
-        ('Bridge Repair Triage', 'Engineering assessment for a small pedestrian bridge damaged by storms.', 'Creek Path', 28.5900, 77.2400, 'Critical', 'Infrastructure')
+        ('Bridge Repair Triage', 'Engineering assessment for a small pedestrian bridge damaged by storms.', 'Creek Path', 28.5900, 77.2400, 'Critical', 'Infrastructure'),
+        ('Monsoon Water Logging', 'Heavy water logging reported near Mumbai Central. Drainage assistance required.', 'Mumbai Central', 19.0760, 72.8777, 'High', 'Infrastructure')
     `);
 
     await db.run(`INSERT INTO volunteers (name, skills, location, lat, lng, availability) VALUES 

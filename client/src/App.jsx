@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker, useMap } from 'react-leaflet';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Map, Activity, Users, AlertCircle, CheckCircle2, Navigation, Sparkles, UserPlus, AlertTriangle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -22,13 +22,6 @@ function App() {
   const [selectedNeed, setSelectedNeed] = useState(null);
   const [rankedVolunteers, setRankedVolunteers] = useState([]);
   const [isMatching, setIsMatching] = useState(false);
-  const [map, setMap] = useState(null);
-
-  useEffect(() => {
-    if (map) {
-      map.setView([CITIES[currentCity].lat, CITIES[currentCity].lng], 12);
-    }
-  }, [currentCity, map]);
 
   useEffect(() => {
     fetchData();
@@ -46,6 +39,9 @@ function App() {
       console.error('Error fetching data:', err);
     }
   };
+
+  const filteredNeeds = needs.filter(n => Math.abs(n.lat - CITIES[currentCity].lat) < 0.5);
+  const filteredVolunteers = volunteers.filter(v => Math.abs(v.lat - CITIES[currentCity].lat) < 0.5);
 
   const handleSelectNeed = async (need) => {
     setSelectedNeed(need);
@@ -107,8 +103,8 @@ function App() {
               {Object.keys(CITIES).map(city => <option key={city} value={city}>{city}</option>)}
             </select>
             <div style={{ display: 'flex', gap: '1.5rem', fontWeight: 600 }}>
-              <span style={{ color: '#b91c1c' }}>{needs.filter(n=>n.urgency==='Critical' && n.status==='pending').length} Critical Alerts</span>
-              <span style={{ color: 'var(--brand-deep)' }}>{volunteers.length} Active Personnel</span>
+              <span style={{ color: '#b91c1c' }}>{filteredNeeds.filter(n=>n.urgency==='Critical' && n.status==='pending').length} Critical Alerts</span>
+              <span style={{ color: 'var(--brand-deep)' }}>{filteredVolunteers.length} Active Personnel</span>
             </div>
           </div>
         </header>
@@ -116,12 +112,13 @@ function App() {
         {activeTab === 'map' && (
           <div className="dashboard-layout">
             <div className="map-container">
-              <MapContainer center={[CITIES[currentCity].lat, CITIES[currentCity].lng]} zoom={12} scrollWheelZoom={true} zoomControl={false} whenCreated={setMap}>
+              <MapContainer center={[CITIES[currentCity].lat, CITIES[currentCity].lng]} zoom={12} scrollWheelZoom={true} zoomControl={false}>
+                <MapController center={[CITIES[currentCity].lat, CITIES[currentCity].lng]} />
                 <TileLayer
                   url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                   attribution='&copy; OpenStreetMap contributors'
                 />
-                {needs.map(need => (
+                {filteredNeeds.map(need => (
                   <CircleMarker
                     key={need.id}
                     center={[need.lat, need.lng]}
@@ -206,14 +203,14 @@ function App() {
         )}
 
         {activeTab === 'data' && (
-          <DataAggregationView needs={needs} />
+          <DataAggregationView needs={filteredNeeds} />
         )}
 
         {activeTab === 'volunteers' && (
           <div style={{ padding: '2rem', overflowY: 'auto' }}>
             <h2 style={{ marginBottom: '2rem' }}>Registered Volunteer Force</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-              {volunteers.map(v => (
+              {filteredVolunteers.map(v => (
                 <div key={v.id} className="impact-card">
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h3 style={{ fontSize: '1.2rem', margin: 0 }}>{v.name}</h3>
@@ -249,6 +246,14 @@ function App() {
       </main>
     </div>
   );
+}
+
+function MapController({ center }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, 12);
+  }, [center, map]);
+  return null;
 }
 
 function ReportNeedForm({ onComplete, defaultCoords }) {
